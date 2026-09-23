@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 // 数据库用户实体类
 @Data
-@TableName("user") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
+@TableName("users") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
 public class User {
     // 用户id
     @TableId(type = IdType.AUTO) // mybatisplus 提供的注解， 用于指定数据库表的主键字段， 这里用自动递增策略， 数据库表的主键字段要设置为自增
@@ -67,10 +67,6 @@ public class User {
     // 状态
     @TableField("status")
     private Integer status;
-
-    // 显示名称
-    @TableField("display_name")
-    private String displayName;
 
     // 创建时间
     @TableField("created_at")
