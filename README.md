@@ -1,2 +1,0 @@
-# ai-springboot
-ai-springboot
