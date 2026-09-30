@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.aispringboot.enumClass.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 // 数据库用户实体类
 @Data
-@TableName("users") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
+@TableName("user") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
 public class User {
     // 用户id
     @TableId(type = IdType.AUTO) // mybatisplus 提供的注解， 用于指定数据库表的主键字段， 这里用自动递增策略， 数据库表的主键字段要设置为自增
@@ -75,5 +76,26 @@ public class User {
     // 更新时间
     @TableField("updated_at")
     private String updatedAt;
+
+//    /*
+//    是否为普通用户
+//    */
+//    public boolean isUser() {
+//        return UserType.USERType.USER.equals(this.userType);
+//    }
+    /*
+    * 是否为正常状态
+    * */
+    public boolean isActive() {
+        return UserStatus.NORMAL.getCode().equals(this.status);
+    }
+
+//    /*
+//    * 是否为禁用状态
+//    * */
+//    public boolean isDisabled() {
+//        return UserStatus.DISABLED.getCode().equals(this.status);
+//    }
+
 
 }

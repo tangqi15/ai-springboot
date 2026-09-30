@@ -40,15 +40,15 @@ public class Result<T> {
 
     public static <T> Result<T> error(String code, String msg) {
         Result<T> result = error();
-        result.setCode(ResultCode.ERROR.getCode());
-        result.setMsg(ResultCode.ERROR.getMsg());
+        result.setCode(code);
+        result.setMsg(msg);
         return result;
     }
 
     public static <T> Result<T> error(String code, String msg, T data) {
         Result<T> result = error();
-        result.setCode(ResultCode.ERROR.getCode());
-        result.setMsg(ResultCode.ERROR.getMsg());
+        result.setCode(code);
+        result.setMsg(msg);
         result.setData(data);
         return result;
     }
