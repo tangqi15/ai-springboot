@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.aispringboot.enumClass.UserStatus;
+import com.example.aispringboot.enumClass.UserType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDate;
+
 // 数据库用户实体类
 @Data
 @TableName("user") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
@@ -57,6 +61,10 @@ public class User {
     @Pattern(regexp = "^1[3456789]\\d{9}$", message = "手机号格式错误")
     private String phone;
 
+    // 生日
+    @TableField("birthday")
+    private LocalDate birthday;
+
     // 性别
     @TableField("gender")
     private Integer gender;
@@ -96,6 +104,20 @@ public class User {
 //    public boolean isDisabled() {
 //        return UserStatus.DISABLED.getCode().equals(this.status);
 //    }
+
+    /*
+     * 获取用户类型显示名称
+     * */
+    public String getStatusDisplayName() {
+        try {
+            return UserType.fromCode(userType).getDdscription();
+        } catch (IllegalArgumentException e) {
+            return "未知";
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

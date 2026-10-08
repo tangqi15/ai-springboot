@@ -7,6 +7,7 @@ import com.example.aispringboot.common.Result;
 import com.example.aispringboot.entity.User;
 import com.example.aispringboot.exception.BusinessException;
 import com.example.aispringboot.mapper.UserMapper;
+import com.example.aispringboot.util.JwtTokenUtil;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,9 +50,14 @@ public class UserService {
 
         // 检查用户的状态
 //       if(user.getStatus() != 1) {
-        if (user.isActive()) {
+        if (!user.isActive()) {
             throw new BusinessException("用户已被禁用, 请联系管理员");
         }
+
+        // 生成JWT token
+        String token = JwtTokenUtil.generateToken(user.getId(), user.getUsername(), user.getUserType());
+
+        System.out.println(token);
 
         return Result.ok(new UserLoginResponseDTO());
     }

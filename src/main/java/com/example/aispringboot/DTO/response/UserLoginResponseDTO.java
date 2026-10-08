@@ -1,6 +1,9 @@
 package com.example.aispringboot.DTO.response;
 
+import lombok.Builder;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 public class UserLoginResponseDTO {
@@ -8,9 +11,10 @@ public class UserLoginResponseDTO {
     private String roleType;
     private UserDetailResponseDTO userInfo;
 
+    @Builder
     @Data
     public static class UserDetailResponseDTO {
-         private String id;
+         private Long id;
          private String username;
          private String password;
          private String nickname;
@@ -18,6 +22,7 @@ public class UserLoginResponseDTO {
          private String phone;
          private Integer gender; // 这里为什么用 Int 的包装类型， 可以用Int 类型么， 可以用Int 类型， 但是Int 类型不能用null。包装类型可以为null。
          private String genderDisplayName;
+         private LocalDate birthday;
          private Integer userType;
          private Integer status;
          private String statusDisplayName;
