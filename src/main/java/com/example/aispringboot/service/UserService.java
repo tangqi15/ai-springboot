@@ -2,6 +2,7 @@ package com.example.aispringboot.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.aispringboot.DTO.command.UserLoginCommandDTO;
+import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.common.Result;
 import com.example.aispringboot.entity.User;
@@ -23,6 +24,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
+    // 登录
     public UserLoginResponseDTO login(UserLoginCommandDTO commandDTO) {
         // service 逻辑处理
 
@@ -64,5 +66,38 @@ public class UserService {
 //        UserLoginResponseDTO data = UserConvert.entityToLoginResponse(token, userInfo);
 //        return Result.ok(data);
         return UserConvert.entityToLoginResponse(token, userInfo);
+    }
+
+    // 注册
+    public UserLoginResponseDTO.UserDetailResponseDTO register(UserRegisterCommandDTO commandDTO) {
+
+        // 验证密码是否一致
+        if (!commandDTO.getPassword().equals(commandDTO.getConfirmPassword())) {
+            throw  new BusinessException("两次密码输入不一致");
+        }
+
+        // 检查用户名是否存在
+        LambdaQueryWrapper<User> usernameQuery = new LambdaQueryWrapper<User>();
+        usernameQuery.eq(User::getUsername, commandDTO.getUsername());
+//        法1: 查询对象
+//        User user = userMapper.selectOne(queryWrapper);
+//        if (user != null) {
+//            throw new BusinessException("用户名已存在");
+//        }
+
+//        法2 查询数量
+        if(userMapper.selectCount(usernameQuery) > 0) {
+            throw new BusinessException("用户名已存在");
+        }
+
+        // 检查邮箱是否存在
+        LambdaQueryWrapper<User> emailQuery = new LambdaQueryWrapper<User>();
+        emailQuery.eq(User::getEmail, commandDTO.getEmail());
+        Long count = userMapper.selectCount(emailQuery);
+        if (count > 0) {
+            throw new BusinessException("邮箱已存在");
+        }
+
+        return null;
     }
 }

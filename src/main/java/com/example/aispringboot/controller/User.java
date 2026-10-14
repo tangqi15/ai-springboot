@@ -1,5 +1,6 @@
 package com.example.aispringboot.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.command.UserLoginCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
@@ -37,10 +38,13 @@ public class User {
     public Result<UserLoginResponseDTO.UserDetailResponseDTO> register(@Valid @RequestBody UserRegisterCommandDTO addCommandDTO) {
         System.out.println(addCommandDTO);
 
+        // cn.hutool 携带的 转成json 的工具类
+        System.out.println(JSONUtil.parseObj(addCommandDTO));
 
 
-//        return Result.ok("注册成功，请返回登录");
-        return null;
+        UserLoginResponseDTO.UserDetailResponseDTO result = userService.register(addCommandDTO);
+
+        return Result.ok(result);
 
     }
 
