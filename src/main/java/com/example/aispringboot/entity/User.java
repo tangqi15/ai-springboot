@@ -105,12 +105,20 @@ public class User {
 //        return UserStatus.DISABLED.getCode().equals(this.status);
 //    }
 
+    /**
+     * 获取显示名称 （优先显示昵称，否则显示用户名）
+     */
+    public String getDisplayName() {
+        return nickname != null && !nickname.trim().isEmpty() ? nickname : username;
+    }
+
+
     /*
      * 获取用户类型显示名称
      * */
-    public String getStatusDisplayName() {
+    public String getUserTypeDisplayName() {
         try {
-            return UserType.fromCode(userType).getDdscription();
+            return UserType.fromCode(userType).getDescription();
         } catch (IllegalArgumentException e) {
             return "未知";
         } catch (IllegalAccessException e) {
@@ -119,5 +127,15 @@ public class User {
     }
 
 
-
+    /*
+    * 获取用户状态显示名称
+    *
+    * */
+    public String getStatusDisplayName() {
+        try {
+            return UserStatus.fromCode(userType).getDescription();
+        } catch (IllegalArgumentException e) {
+            return "未知";
+        }
+    }
 }

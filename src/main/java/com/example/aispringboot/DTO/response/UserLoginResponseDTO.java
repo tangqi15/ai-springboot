@@ -6,6 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class UserLoginResponseDTO {
     private String token;
     private String roleType;
@@ -24,6 +25,7 @@ public class UserLoginResponseDTO {
          private String genderDisplayName;
          private LocalDate birthday;
          private Integer userType;
+         private String userTypeDisplayName;
          private Integer status;
          private String statusDisplayName;
          private String displayName;

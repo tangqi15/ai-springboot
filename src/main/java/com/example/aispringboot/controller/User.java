@@ -24,9 +24,9 @@ public class User {
         System.out.println(commandDTO.getPassword());
 
         // 调用 service 层的 login 方法
-        Result<UserLoginResponseDTO> result = userService.login(commandDTO);
+        UserLoginResponseDTO result = userService.login(commandDTO);
         System.out.println(result);
 
-        return result;
+        return Result.ok(result);
     }
 }

@@ -7,6 +7,7 @@ import com.example.aispringboot.common.Result;
 import com.example.aispringboot.entity.User;
 import com.example.aispringboot.exception.BusinessException;
 import com.example.aispringboot.mapper.UserMapper;
+import com.example.aispringboot.service.convert.UserConvert;
 import com.example.aispringboot.util.JwtTokenUtil;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,7 +23,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
-    public Result<UserLoginResponseDTO> login(UserLoginCommandDTO commandDTO) {
+    public UserLoginResponseDTO login(UserLoginCommandDTO commandDTO) {
         // service 逻辑处理
 
         // 构建查询条件。User 是实体类（数据表类）
@@ -59,6 +60,9 @@ public class UserService {
 
         System.out.println(token);
 
-        return Result.ok(new UserLoginResponseDTO());
+        UserLoginResponseDTO.UserDetailResponseDTO userInfo = UserConvert.entityToDetailResponse(user);
+//        UserLoginResponseDTO data = UserConvert.entityToLoginResponse(token, userInfo);
+//        return Result.ok(data);
+        return UserConvert.entityToLoginResponse(token, userInfo);
     }
 }
