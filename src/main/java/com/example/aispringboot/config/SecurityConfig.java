@@ -20,10 +20,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 public class SecurityConfig {
 
+    // 这里是放行接口
     private static final String[] PUBLIC_PATHS = {
             "/",
             "/api/test",
-            "/api/user/login"
+            "/api/user/login",
+            "/api/user/add",
     };
 
     // 注解：  定义一个Bean，用于配置Web安全

@@ -1,5 +1,6 @@
 package com.example.aispringboot.controller;
 
+import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.command.UserLoginCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.common.Result;
@@ -18,6 +19,7 @@ public class User {
     @Resource // 注入 UserService 实现类
     private UserService userService;
 
+    // 用户登录接口
     @PostMapping("/login")
     public Result<UserLoginResponseDTO> login(@Valid @RequestBody UserLoginCommandDTO commandDTO) {
         System.out.println(commandDTO.getUsername());
@@ -29,4 +31,17 @@ public class User {
 
         return Result.ok(result);
     }
+
+    // 用户注册接口
+    @PostMapping("/add")
+    public Result<UserLoginResponseDTO.UserDetailResponseDTO> register(@Valid @RequestBody UserRegisterCommandDTO addCommandDTO) {
+        System.out.println(addCommandDTO);
+
+
+
+//        return Result.ok("注册成功，请返回登录");
+        return null;
+
+    }
+
 }
