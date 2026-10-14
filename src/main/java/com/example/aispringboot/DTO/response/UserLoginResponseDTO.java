@@ -29,8 +29,8 @@ public class UserLoginResponseDTO {
          private Integer status;
          private String statusDisplayName;
          private String displayName;
-         private String createdAt;
-         private String updatedAt;
+         private LocalDate createdAt;
+         private LocalDate updatedAt;
     }
 
 

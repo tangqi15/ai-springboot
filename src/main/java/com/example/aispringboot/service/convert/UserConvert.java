@@ -1,7 +1,11 @@
 package com.example.aispringboot.service.convert;
 
+import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.entity.User;
+import com.example.aispringboot.enumClass.UserStatus;
+
+import java.time.LocalDate;
 
 public class UserConvert {
 
@@ -27,7 +31,7 @@ public class UserConvert {
                 .build();
     }
 
-    // 这是是完整结构
+    // 这是 返回的完整结构
     public static UserLoginResponseDTO entityToLoginResponse(String token,UserLoginResponseDTO.UserDetailResponseDTO userInfo) {
         return UserLoginResponseDTO.builder()
                 .token(token)
@@ -35,6 +39,26 @@ public class UserConvert {
                 .userInfo(userInfo)
                 .build();
     }
+
+
+    // 转换类， 将参数转换成 数据库识别的数据
+    public static User registerCommandToEntity(UserRegisterCommandDTO userRegisterCommandDTO, String encodePassword) {
+        return User.builder()
+                .username(userRegisterCommandDTO.getUsername())
+                .email(userRegisterCommandDTO.getEmail())
+                .phone(userRegisterCommandDTO.getPhone())
+                .password(encodePassword)
+                .nickname(userRegisterCommandDTO.getNickname())
+                .gender(userRegisterCommandDTO.getGender())
+                .birthday(userRegisterCommandDTO.getBirthday())
+                .userType(userRegisterCommandDTO.getUserType())
+                .status(UserStatus.NORMAL.getCode())
+                .createdAt(LocalDate.now())
+                .updatedAt(LocalDate.now())
+                .build();
+
+    }
+
 
     public static String getGenderDisplayName(Integer gender) {
         if (gender == null) {

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 //登录参数校验
 @Data
 public class UserRegisterCommandDTO {
@@ -40,7 +42,8 @@ public class UserRegisterCommandDTO {
     @Size(min = 6, max = 50, message = "密码长度不能超过100个字符")
     private String confirmPassword;
 
-    private String gender;
+    private Integer gender;
+    private LocalDate birthday;
     private Integer userType = 1;
 
 }

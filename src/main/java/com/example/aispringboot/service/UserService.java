@@ -6,6 +6,7 @@ import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.common.Result;
 import com.example.aispringboot.entity.User;
+import com.example.aispringboot.enumClass.UserType;
 import com.example.aispringboot.exception.BusinessException;
 import com.example.aispringboot.mapper.UserMapper;
 import com.example.aispringboot.service.convert.UserConvert;
@@ -98,6 +99,21 @@ public class UserService {
             throw new BusinessException("邮箱已存在");
         }
 
-        return null;
+        // 用户类型 是否在枚举中
+        if(!UserType.isValidCode(commandDTO.getUserType())) {
+            throw new BusinessException("无效的用户类型");
+        }
+
+
+        // 密码加密
+        String password = commandDTO.getPassword().trim();
+        String encodePassword = bCryptPasswordEncoder.encode(password);
+
+        // 创建用户  这里的数据是不是数据库能识别的数据， 需要一个转换类，转换成 数据库能识别的数据
+        User user = UserConvert.registerCommandToEntity(commandDTO, encodePassword);
+
+        // 插入数据库
+        userMapper.insert(user);
+        return UserConvert.entityToDetailResponse(user);
     }
 }

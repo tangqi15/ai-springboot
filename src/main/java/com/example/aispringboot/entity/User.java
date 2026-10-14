@@ -9,11 +9,13 @@ import com.example.aispringboot.enumClass.UserType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 // 数据库用户实体类
+@Builder
 @Data
 @TableName("user") // mybatisplus 提供的注解， 用于指定数据库表名， 当类名和数据库表名不同时， 用这个注解指定数据库表名。 一样的时候可加可不加
 public class User {
@@ -79,11 +81,11 @@ public class User {
 
     // 创建时间
     @TableField("created_at")
-    private String createdAt;
+    private LocalDate createdAt;
 
     // 更新时间
     @TableField("updated_at")
-    private String updatedAt;
+    private LocalDate updatedAt;
 
 //    /*
 //    是否为普通用户
