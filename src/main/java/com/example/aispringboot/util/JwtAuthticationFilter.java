@@ -40,9 +40,18 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
         //  1、提取jwt token
         String token = JwtTokenUtil.extractTokenFromRequest(request);
         if (StringUtils.hasText(token)) {
-            // 验证token
+            //  2、验证 JWT token 并获取用户信息
+            JwtTokenUtil.TokenVerificationResult validationResult = JwtTokenUtil.validateToken(token);
 
-            
+            if (validationResult != null && validationResult.isVaild()) {
+
+            } else {
+                // 清理上下文
+                clearSecurityContext();
+                ResponseUtil.writeError(response, ResultCode.TOKEN_INVALID );
+                return;
+            }
+
         } else {
             // 清理上下文
             clearSecurityContext();
@@ -51,7 +60,7 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
         }
         // 继续 过滤器链
         chain.doFilter(request, response);
-        //  2、验证 JWT token
+
         //  3、
         //  4、
         //  5、

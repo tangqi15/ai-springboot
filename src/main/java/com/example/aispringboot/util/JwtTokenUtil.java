@@ -1,9 +1,13 @@
 package com.example.aispringboot.util;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.aispringboot.config.JwtConfig;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -79,5 +83,61 @@ public class JwtTokenUtil implements ApplicationContextAware {
         }
 
         return null;
+    }
+
+    // 验证token
+    public static TokenVerificationResult validateToken(String token) {
+        DecodedJWT jwt = verifyToken(token);
+        Long userId = jwt.getClaim("userId").asLong();
+        String username = jwt.getClaim("username").asString();
+
+        // 角色类型
+        Integer roleType = null;
+        try {
+            roleType = jwt.getClaim("rokeType").asInt();
+        } catch (Exception e) {
+            String roleTypeStr = jwt.getClaim("rokeType").asString();
+            if (StringUtils.hasText(roleTypeStr)) {
+                roleType = Integer.valueOf(roleTypeStr);
+            }
+        }
+        if (userId != null && StringUtils.hasText(username) && roleType != null) {
+            return new TokenVerificationResult(userId, username, roleType, true);
+        }
+
+        return null;
+    }
+
+    // 验证token 有效性
+    public static DecodedJWT verifyToken(String token) {
+        if (!StringUtils.hasText(token)) {
+            throw new JWTVerificationException("Token 不能为空");
+        }
+        // token 解码
+        JwtConfig jwtConfig = getJwtConfig();
+        Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
+
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(ISSUER)
+                .build();
+
+        // 返回解码后的对象
+        return verifier.verify(token);
+    }
+
+    // Token 验证结果 封装类
+    @Getter
+    public static class TokenVerificationResult {
+        private final Long userId;
+        private final String username;
+        private final Integer rokeType;
+        private final boolean vaild;
+
+        public TokenVerificationResult(Long userId, String username, Integer rokeType, boolean vaild) {
+            this.userId = userId;
+            this.username = username;
+            this.rokeType = rokeType;
+            this.vaild = vaild;
+        }
     }
 }
