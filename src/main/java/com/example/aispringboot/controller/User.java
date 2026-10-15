@@ -8,10 +8,7 @@ import com.example.aispringboot.common.Result;
 import com.example.aispringboot.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -45,7 +42,12 @@ public class User {
         UserLoginResponseDTO.UserDetailResponseDTO result = userService.register(addCommandDTO);
 
         return Result.ok(result);
-
     }
 
+    // 获取当前用户接口  经过jwt认证
+    @GetMapping("/current")
+    public Result<UserLoginResponseDTO.UserDetailResponseDTO> getCurrentUser() {
+        // 解决如何从 token中 解析出用户ID
+        return null;
+    }
 }
