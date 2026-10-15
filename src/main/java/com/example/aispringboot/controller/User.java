@@ -1,11 +1,14 @@
 package com.example.aispringboot.controller;
 
 import cn.hutool.json.JSONUtil;
+import cn.hutool.jwt.JWTUtil;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.command.UserLoginCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.common.Result;
 import com.example.aispringboot.service.UserService;
+import com.example.aispringboot.util.JwtTokenUtil;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +51,14 @@ public class User {
     @GetMapping("/current")
     public Result<UserLoginResponseDTO.UserDetailResponseDTO> getCurrentUser() {
         // 解决如何从 token中 解析出用户ID
-        return null;
+        String token = JwtTokenUtil.getCurrentToken();
+
+        DecodedJWT jwt = JwtTokenUtil.verifyToken(token);
+
+        Long userId = jwt.getClaim("userId").asLong();
+        System.out.println(userId + "userid");
+        UserLoginResponseDTO.UserDetailResponseDTO result = userService.getUserById(userId);
+
+        return Result.ok(result);
     }
 }

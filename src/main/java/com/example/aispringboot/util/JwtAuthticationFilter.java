@@ -14,11 +14,15 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 // 代表直只执行一次 OncePerRequestFilter
 public class JwtAuthticationFilter extends OncePerRequestFilter {
@@ -60,7 +64,24 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
                 System.out.println(JSONUtil.parseObj(user) + "useruser");
 
                 if (user != null && UserStatus.NORMAL.getCode().equals(user.getStatus())) {
-                    
+                    // 4、 创建 Spring Security 认证对象
+                    // 单元树权限列表
+                    List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                            new SimpleGrantedAuthority("ROLE_" + validationResult.getRokeType())
+                    );
+
+                    // 5、创建 UsernamePasswordAuthenticationToken 对象
+                    UsernamePasswordAuthenticationToken authcation = new UsernamePasswordAuthenticationToken(
+                            validationResult.getUsername(), // 用户名作为主体
+                            null,
+                            authorities
+                    );
+
+                    // 6、 设置认证信息到 Spring Security 上下文
+                    SecurityContextHolder.getContext().setAuthentication(authcation);
+
+                    // 7、 将token 存储到 请求的属性中
+                    request.setAttribute("jwtToken", token);
                 } else {
                     clearSecurityContext();
                     ResponseUtil.writeError(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
