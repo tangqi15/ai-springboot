@@ -3,9 +3,11 @@ package com.example.aispringboot.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.aispringboot.config.JwtConfig;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -51,5 +53,31 @@ public class JwtTokenUtil implements ApplicationContextAware {
        } catch (Exception e) {
            throw new RuntimeException("生成token 失败： " + e);
        }
+    }
+
+    // 提取token
+    public static String extractTokenFromRequest(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        String headerToken = request.getHeader("token");
+        // Spring 的 org.springframework.util.StringUtils
+        // StringUtils.hasText(str) 用来判断字符串是否包含至少一个非空白字符。
+        // 当 headerToken 中包含 字符串 null、“”、 “   ”、“\t\n(制表符、换行符)” 为false
+        // "hello"、 “ hello ”  为true
+
+        // 它可以安全处理 null，但只判断有没有内容，不代表内容就是合法的 Token。
+        //        - null
+        //        - 空字符串 ""
+        //        - 全是空白字符，比如 "   "、"\t\n"
+
+        // 所以它比只判断 str != null && !str.isEmpty() 多一步：全是空白也会返回 false。
+
+        if (StringUtils.hasText(headerToken)) {
+            return headerToken;
+        }
+
+        return null;
     }
 }

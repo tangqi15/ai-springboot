@@ -1,10 +1,14 @@
 package com.example.aispringboot.util;
 
+import ch.qos.logback.core.util.StringUtil;
+import com.example.aispringboot.common.ResultCode;
 import com.example.aispringboot.config.SecurityConfig;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,7 +28,7 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain chain) throws ServletException, IOException {
 
         // 获取请求的URI 和 方法
         String requestUri = request.getRequestURI();
@@ -32,5 +36,34 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
 
         System.out.println(requestUri);
         System.out.println(method);
+
+        //  1、提取jwt token
+        String token = JwtTokenUtil.extractTokenFromRequest(request);
+        if (StringUtils.hasText(token)) {
+            // 验证token
+
+            
+        } else {
+            // 清理上下文
+            clearSecurityContext();
+            ResponseUtil.writeError(response, ResultCode.ACCESS_UNAUTHORIZED);
+            return;
+        }
+        // 继续 过滤器链
+        chain.doFilter(request, response);
+        //  2、验证 JWT token
+        //  3、
+        //  4、
+        //  5、
+        //  6、
+        //  7、
+        //  8、
+
+
+    }
+
+    // 清理String Security 安全框架的上下文
+    private void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
     }
 }
