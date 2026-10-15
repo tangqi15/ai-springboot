@@ -116,4 +116,15 @@ public class UserService {
         userMapper.insert(user);
         return UserConvert.entityToDetailResponse(user);
     }
+
+    // 根据用户id,查询用户信息
+    public UserLoginResponseDTO.UserDetailResponseDTO getUserById(Long userId) {
+
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        return UserConvert.entityToDetailResponse(user);
+    }
 }

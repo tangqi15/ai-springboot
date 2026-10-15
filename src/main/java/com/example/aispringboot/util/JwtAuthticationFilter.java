@@ -1,8 +1,15 @@
 package com.example.aispringboot.util;
 
 import ch.qos.logback.core.util.StringUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
+import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.common.ResultCode;
 import com.example.aispringboot.config.SecurityConfig;
+import com.example.aispringboot.entity.User;
+import com.example.aispringboot.enumClass.UserStatus;
+import com.example.aispringboot.service.UserService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +22,10 @@ import java.io.IOException;
 
 // 代表直只执行一次 OncePerRequestFilter
 public class JwtAuthticationFilter extends OncePerRequestFilter {
+
+    // 引入 UserService
+    @Resource
+    private UserService userService;
 
     @Override
     // 不需要过滤的方法. request 拿到当前请求
@@ -44,6 +55,16 @@ public class JwtAuthticationFilter extends OncePerRequestFilter {
             JwtTokenUtil.TokenVerificationResult validationResult = JwtTokenUtil.validateToken(token);
 
             if (validationResult != null && validationResult.isVaild()) {
+                // 3、 查询用户信息 验证用户的状态
+                UserLoginResponseDTO.UserDetailResponseDTO user = userService.getUserById(validationResult.getUserId());
+                System.out.println(JSONUtil.parseObj(user) + "useruser");
+
+                if (user != null && UserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    
+                } else {
+                    clearSecurityContext();
+                    ResponseUtil.writeError(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
+                }
 
             } else {
                 // 清理上下文
