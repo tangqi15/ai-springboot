@@ -64,8 +64,11 @@ public class UserService {
         System.out.println(token);
 
         UserLoginResponseDTO.UserDetailResponseDTO userInfo = UserConvert.entityToDetailResponse(user);
+        // 两行输出
 //        UserLoginResponseDTO data = UserConvert.entityToLoginResponse(token, userInfo);
 //        return Result.ok(data);
+
+        // 合成一行直接输出
         return UserConvert.entityToLoginResponse(token, userInfo);
     }
 
