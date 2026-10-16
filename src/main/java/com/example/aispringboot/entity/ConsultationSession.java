@@ -1,5 +1,7 @@
 package com.example.aispringboot.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.validation.constraints.Size;
@@ -11,22 +13,30 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 @TableName("consultation_session")
+
 public class ConsultationSession {
-    @TableId("user_id") // 用户ID
+    // 会话ID
+    @TableId(type = IdType.AUTO)
+    private Long id;
+
+    // 用户ID
+    @TableField("user_id")
     private Long userId;
 
-    @TableId("session_title") // 会话标题
+    // 会话标题
     @Size(max = 200, message = "会话标题长度不能超过200个字符")
+    @TableField("session_title")
     private String sessionTitle;
 
-    @TableId("started_at") //
+    // 开始时间
+    @TableField("started_at")
     private LocalDateTime startedAt;
 
-    @TableId("last_emotion_analysis") // 最后一次情绪分析结果(JSON格式)
+    // 最后一次情绪分析结果(JSON格式)
+    @TableField("last_emotion_analysis")
     private String lastEmotionAnalysis;
 
-    @TableId("last_emotion_updated_at") // 最后一次情绪分析更新时间
+    // 最后一次情绪分析更新时间
+    @TableField("last_emotion_updated_at")
     private LocalDateTime lastEmotionUpdatedAt;
-
-
 }

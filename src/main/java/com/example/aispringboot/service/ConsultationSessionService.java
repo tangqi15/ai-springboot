@@ -43,8 +43,7 @@ public class ConsultationSessionService {
             // 插入记录
             consultationSessionMapper.insert(session);
             return session;
-        } else {
-            throw new BusinessException("当前用户不存在");
         }
+        return null;
      }
 }

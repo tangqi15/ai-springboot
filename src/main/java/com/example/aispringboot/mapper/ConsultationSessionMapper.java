@@ -1,8 +1,8 @@
 package com.example.aispringboot.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.aispringboot.entity.ConsultationSession;
 import org.apache.ibatis.annotations.Mapper;
+import com.example.aispringboot.entity.ConsultationSession;
 
 @Mapper
 public interface ConsultationSessionMapper extends BaseMapper<ConsultationSession> {

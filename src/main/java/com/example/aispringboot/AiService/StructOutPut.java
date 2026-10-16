@@ -1,5 +1,7 @@
 package com.example.aispringboot.AiService;
 
+
+// 输出结构体
 public class StructOutPut {
     // 之前是通过 data 方式实现的。 对于这种不变的数据，我们还可以通过 record 实现
 
@@ -11,6 +13,7 @@ public class StructOutPut {
              Long startTime,
              Long expiryTime,
              Integer messageCount,
-             String status) {}
+             String status
+    ) {}
 
 }
