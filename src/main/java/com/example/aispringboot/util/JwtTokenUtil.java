@@ -131,7 +131,7 @@ public class JwtTokenUtil implements ApplicationContextAware {
         return null;
     }
 
-    // 验证token 有效性
+    // 验证token 有效性. verify 中文是 “验证” 或 “核实”。
     public static DecodedJWT verifyToken(String token) {
         if (!StringUtils.hasText(token)) {
             throw new JWTVerificationException("Token 不能为空");
